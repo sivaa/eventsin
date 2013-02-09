@@ -1,5 +1,5 @@
+Scripts/
+Lib/
+Include/
 *.py[cod]
 .metadata/
-Lib/
-Scripts/
-Include/
