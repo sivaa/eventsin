@@ -53,11 +53,11 @@ class Topic(models.Model):
 class Event(models.Model):
     event_id        =   models.CharField(max_length = 255, primary_key=True)
     name            =   models.CharField(max_length = 255)
-    city            =   models.CharField(max_length = 255)
-    country_code    =   models.CharField(max_length = 255)
+    city            =   models.CharField(max_length = 255, null = True, blank = True)
+    country_code    =   models.CharField(max_length = 255, null = True, blank = True)
     url             =   models.URLField()
-    date            =   models.DateField()
-    description     =   models.TextField()
+    date            =   models.DateTimeField(null = True, blank = True)
+    description     =   models.TextField(null = True, blank = True)
     cost            =   models.CharField(max_length = 255)
     
     def __unicode__(self):
@@ -75,3 +75,24 @@ class TopicEvent(models.Model):
     def __unicode__(self):
         return u' %s %s' % (self.topic.name, self.event.name)
 
+
+class EventMaster:
+    event_id        =   ''
+    name            =   ''
+    city            =   ''
+    country_code    =   ''
+    url             =   ''
+    date            =   ''
+    description     =   ''
+    cost            =   ''
+    
+    def __init__(self, event_id, name, city, country_code, url, date, description, cost):
+        self.event_id = event_id
+        self.name = name
+        self.city = city
+        self.country_code = country_code
+        self.url = url
+        self.date = date
+        self.description = description
+        self.cost = cost
+        

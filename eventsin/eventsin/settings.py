@@ -125,7 +125,6 @@ INSTALLED_APPS = (
     
     'social_auth',
     'app',
-    
 )
 
 
@@ -184,16 +183,22 @@ SOCIAL_AUTH_PIPELINE = (
            )
 
 SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = True
+
 # Override the default login page template
-from urls import admin
+from eventsin.urls import admin
 admin.site.login_template = "admin/login.html"
 
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'sendgrid_username'
-EMAIL_HOST_PASSWORD = 'sendgrid_password'
+EMAIL_HOST_USER = 'eventsin'
+EMAIL_HOST_PASSWORD = 'netapp'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+#from django.core.mail import send_mail
+#send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
