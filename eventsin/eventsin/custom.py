@@ -1,4 +1,9 @@
 from social_auth.models import UserSocialAuth
+from app.models import UserPreference, Event, Skill, Topic, UserSkill, TopicEvent
+
+import json
+
+
 
 def create_user(backend, details, response, uid, username, user=None, *args,
                 **kwargs):
@@ -26,3 +31,55 @@ def create_user(backend, details, response, uid, username, user=None, *args,
     }
 
 
+def load_extra_data(backend, details, response, uid, user, social_user=None,
+                    *args, **kwargs):
+    """Load extra data from provider and store it on current UserSocialAuth
+    extra_data field.
+    """
+    social_user = social_user or \
+                  UserSocialAuth.get_social_auth(backend.name, uid)
+    if social_user:
+        extra_data = backend.extra_data(user, uid, response, details)
+        if extra_data and social_user.extra_data != extra_data:
+            if social_user.extra_data:
+                social_user.extra_data.update(extra_data)
+            else:
+                social_user.extra_data = extra_data
+            social_user.save()
+            update_user_skill(social_user)
+        return {'social_user': social_user}
+
+
+def update_user_skill(social_user):
+    data  = social_user.extra_data
+    print social_user.user.id
+    
+    print data
+    
+    mobile = ''
+    try:
+        if data['phone-numbers']['phone-number']['phone-type'] == 'mobile':
+            mobile = data['phone-numbers']['phone-number']['phone-number'] 
+    except:
+        print "Phone # Not found"
+            
+    UserPreference.objects.create(
+                                  user    =   social_user.user,
+                                  weekly  =   True,
+                                  email   =   True,
+                                  city    =   data['location']['name'].split(',')[0].replace('Area', ''),
+                                  country =   data['location']['country']['code'],
+                                  mobile  =   mobile,
+                                  )
+    
+    for skill in data['skills']['skill']:
+        skill_obj = None
+        try:
+            skill_obj = Skill.objects.get(name = skill['skill']['name'])
+            print "already exists"
+        except:
+            skill_obj = Skill.objects.create( name = skill['skill']['name'])
+        try:
+            UserSkill.objects.create(user = social_user.user, skill = skill_obj)
+        except:
+            pass

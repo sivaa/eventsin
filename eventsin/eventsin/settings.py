@@ -124,6 +124,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     
     'social_auth',
+    'app',
+    
 )
 
 
@@ -153,17 +155,18 @@ SOCIAL_AUTH_SESSION_EXPIRATION = False
 LINKEDIN_CONSUMER_KEY        = 'p2yl5397cjzd'
 LINKEDIN_CONSUMER_SECRET     = 'SXpX82yxqqxkmaZu'
 
-LINKEDIN_SCOPE = ['r_basicprofile', 'r_fullprofile', 'r_emailaddress',]
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_fullprofile', 'r_emailaddress', 'r_contactinfo',]
 
 # Add the fields so they will be requested from linkedin.
-LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'location', 'skills',]
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'location', 'phone-numbers', 'skills',]
 # Arrange to add the fields to UserSocialAuth.extra_data
 LINKEDIN_EXTRA_DATA = [('id', 'id'),
                        ('first-name', 'first_name'),
                        ('last-name', 'last_name'),
                        ('email-address', 'email_address'),
-                       #('skills', 'skills'),
                        ('location', 'location'),
+                       ('phone-numbers', 'phone-numbers'),                       
+                       ('skills', 'skills'),
                        ]
 
 SOCIAL_AUTH_PIPELINE = (
@@ -175,15 +178,22 @@ SOCIAL_AUTH_PIPELINE = (
                 #'social_auth.backends.pipeline.user.create_user',
                 'eventsin.custom.create_user',
                 'social_auth.backends.pipeline.social.associate_user',
-                'social_auth.backends.pipeline.social.load_extra_data',
+                #'social_auth.backends.pipeline.social.load_extra_data',
+                'eventsin.custom.load_extra_data',
                 'social_auth.backends.pipeline.user.update_user_details',
            )
 
-SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = False
-
+SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = True
 # Override the default login page template
 from urls import admin
 admin.site.login_template = "admin/login.html"
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'sendgrid_username'
+EMAIL_HOST_PASSWORD = 'sendgrid_password'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
