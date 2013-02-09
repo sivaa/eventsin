@@ -1,10 +1,15 @@
-# Django settings for eventsin project.
+# Django settings for example project.
+
+import os
+
+CURRENT_PATH = os.path.abspath(os.path.dirname(__file__).decode('utf-8')).replace('/settings','/').replace('\\settings','\\') # For windows
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+     ('Sivasubramaniam Arunachalam', 'siva@sivaa.in'),
 )
 
 MANAGERS = ADMINS
@@ -78,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '!am+g4sz_bwh4i!f)5zp021j9_@4__acnd1pbyfvrtv12n38%m'
+SECRET_KEY = 'd1+naa!-(3^pbe3ccjjauw7)3x(nf_6elz0an3lxla93$iqu*f'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -103,6 +108,7 @@ ROOT_URLCONF = 'eventsin.urls'
 WSGI_APPLICATION = 'eventsin.wsgi.application'
 
 TEMPLATE_DIRS = (
+     os.path.join(CURRENT_PATH, '../templates'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -114,12 +120,70 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.staticfiles',   
+    'django.contrib.admin',
+    
+    'social_auth',
 )
+
+
+AUTHENTICATION_BACKENDS = (
+        'social_auth.backends.contrib.linkedin.LinkedinBackend',
+)
+
+#LOGIN_URL          = '/login-form/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL    = '/login-error/'
+
+SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
+SOCIAL_AUTH_ASSOCIATE_URL_NAME = 'socialauth_associate_complete'
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'social_auth.context_processors.social_auth_by_name_backends',
+    'social_auth.context_processors.social_auth_backends',
+    'social_auth.context_processors.social_auth_by_type_backends',
+    'social_auth.context_processors.social_auth_login_redirect',
+)
+
+SOCIAL_AUTH_EXPIRATION = 'expires'
+SOCIAL_AUTH_SESSION_EXPIRATION = False
+
+LINKEDIN_CONSUMER_KEY        = 'p2yl5397cjzd'
+LINKEDIN_CONSUMER_SECRET     = 'SXpX82yxqqxkmaZu'
+
+LINKEDIN_SCOPE = ['r_basicprofile', 'r_fullprofile', 'r_emailaddress',]
+
+# Add the fields so they will be requested from linkedin.
+LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+# Arrange to add the fields to UserSocialAuth.extra_data
+LINKEDIN_EXTRA_DATA = [('id', 'id'),
+                       ('first-name', 'first_name'),
+                       ('last-name', 'last_name'),
+                       ('email-address', 'email_address'),
+                       ('headline', 'headline'),
+                       ('industry', 'industry'),
+                       ('skills','skills'),]
+
+SOCIAL_AUTH_PIPELINE = (
+                'social_auth.backends.pipeline.social.social_auth_user',
+                # Removed by default since it can be a dangerouse behavior that
+                # could lead to accounts take over.
+                #'social_auth.backends.pipeline.associate.associate_by_email',
+                'social_auth.backends.pipeline.user.get_username',
+                #'social_auth.backends.pipeline.user.create_user',
+                'eventsin.custom.create_user',
+                'social_auth.backends.pipeline.social.associate_user',
+                'social_auth.backends.pipeline.social.load_extra_data',
+                'social_auth.backends.pipeline.user.update_user_details',
+           )
+
+SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = True
+
+# Override the default login page template
+from urls import admin
+admin.site.login_template = "admin/login.html"
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -149,3 +213,4 @@ LOGGING = {
         },
     }
 }
+
