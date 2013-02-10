@@ -92,7 +92,7 @@ def format_and_send_email(event_dict, user):
                 'date_time': event.date,
                 'location' : event.city + ", " + event.country_code.upper(),
                 'cost': event.cost,
-                'topics' : str(event_dict[event])
+                'topics' : ', '.join(event_dict[event])
             })
             )
         
