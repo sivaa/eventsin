@@ -13,7 +13,7 @@ FETCH_TOPICS    =   MEETUP_URL + "/topics" #+ DEFAULT_PARAM
 def parse_events_for_topic(topic):
     url = FETCH_EVENTS
     enc = urllib.urlencode({'topic': topic + ',', 'key': MEETUP_API_KEY, 'sign': 'true'})
-    print topic
+    #print topic
     
     req = urllib2.urlopen(url + "/?" + enc)
     json_data = req.read()
@@ -50,7 +50,7 @@ def parse_events_for_topic(topic):
         except:
             pass
         
-        cost = ''
+        cost = 'Free'
         try:
             if x['fee']: 
                 cost = x['fee']['currency'] + " " + str(x['fee']['amount']) 
@@ -66,7 +66,7 @@ def parse_topics_for_skill(skill):
 
     enc = urllib.urlencode({'name': skill, 'key': MEETUP_API_KEY, 'sign': 'true'})
     req = urllib2.urlopen(url + "/?" + enc)
-    print skill
+    #print skill
     json_data = req.read()
     
     encoding=req.headers['content-type'].split('charset=')[-1]

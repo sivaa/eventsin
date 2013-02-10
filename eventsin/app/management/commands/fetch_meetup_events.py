@@ -7,15 +7,14 @@ class Command(BaseCommand):
     help = 'Get MeetUp Events By Topics'
 
     def handle(self, *args, **options):        
-        print "============ STARTED ==================="
+        print "============ JOB STARTED (Get MeetUp Events By Topics) ==================="
         topic_list = Topic.objects.all()
         for topic in topic_list:
+            print "Looking for " + topic.name
             event_list = parse_events_for_topic(topic.name)
-            print "==================================="
             for event in event_list:
                 event_obj = None
                 try:
-                    print event.name
                     event_obj = Event.objects.get(event_id = event.event_id)
                     #print "Event Already Exists"
                 except:
@@ -30,14 +29,13 @@ class Command(BaseCommand):
                                                     description     =   event.description,
                                                     cost            =   event.cost
                                                     )
+                        print "Adding Event : " + event.name + "(" + event.city + ")" 
                     except:
-#                        print "Event Already Exists"
                         pass
 
                 if event_obj:
                     try:
                         TopicEvent.objects.create (event = event_obj, topic = topic)
-                        print '===================================== ADDed ==========================='
                     except:
                         pass
                     

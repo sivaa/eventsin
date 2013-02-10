@@ -1,0 +1,21 @@
+{% autoescape off %}
+
+<html>
+<body>
+	Hello {{ full_name }}!
+	<br> Recommended Upcoming events
+
+	<table>{{ recommend_tr_list }}
+
+	</table>
+
+	<br> You also might be interested in:
+
+	<table>{{ related_tr_list }}
+	</table>
+
+	Happy Meeting, EventsIN Team,
+
+</body>
+</html>
+{% endautoescape %}

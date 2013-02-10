@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
-from app.models import Topic, Skill, UserPreference, UserSkill, Event,\
+from app.models import Topic, Skill, UserPreference, UserSkill, Event, \
     TopicEvent, alternate_location_names
 from app.parser import parse_events_for_topic, parse_topics_for_skill
 from django.core.mail import send_mail
+from django.core.management.base import BaseCommand, CommandError
+from django.template.loader import get_template
+from django.template import Context
 
 class Command(BaseCommand):
     args = '<poll_id poll_id ...>'
@@ -47,14 +49,17 @@ class Command(BaseCommand):
                         #print topic.name + " =====>>>>> " +     topic_event.event.name
 
             # Send Mail
-            format_and_send_email(event_dict, user_preference.user.email)
+            format_and_send_email(event_dict, user_preference.user)
             
         print "=============== COMPLETED ======================"
 
 
-def format_and_send_email(event_dict, email):
-    body = ''
+def format_and_send_email(event_dict, user):
     print event_dict
+    
+    recommend_tr_list = ''
+    related_tr_list = ''
+    
     for event in event_dict:
         print event_dict[event]
         is_related = True
@@ -69,10 +74,45 @@ def format_and_send_email(event_dict, email):
                 except:
                     pass
         if is_related:
-            print "======= realted"
+            related_tr_list += get_template('admin/tr.html').render(
+            Context({
+                'url': event.url,
+                'name': event.name,
+                'date_time': event.date,
+                'location' : event.city + ", " + event.country_code.upper(),
+                'cost': event.cost,
+                'topics' : ', '.join(event_dict[event])
+            })
+            )
         else:
-            print "direct ====="
-                    
+            recommend_tr_list += get_template('admin/tr.html').render(
+            Context({
+                'url': event.url,
+                'name': event.name,
+                'date_time': event.date,
+                'location' : event.city + ", " + event.country_code.upper(),
+                'cost': event.cost,
+                'topics' : str(event_dict[event])
+            })
+            )
+        
+#    print recommend_tr_list
+#    print related_tr_list 
+    
+    html_text =  get_template('admin/email.html').render(
+            Context({
+                'full_name': user.first_name + " " + user.last_name,
+                'recommend_tr_list' : recommend_tr_list,
+                'related_tr_list' : related_tr_list
+                })
+            )
+
+
+    print html_text
+    f = open('myfile.html','w')
+    f.write(html_text) # python will convert \n to os.linesep
+
+                   
 #                body += event.name + " Related(" +  topic + ") \n"
 #                pass
 #    send_mail('Eventsin', body, 'siva@sivaa.in', [email], fail_silently=False)
