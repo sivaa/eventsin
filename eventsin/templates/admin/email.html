@@ -2,18 +2,23 @@
 
 <html>
 <body>
-	Hello {{ full_name }}!
-	<br> Recommended Upcoming events
+    <div style="text-align:center"><img src="https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg" width="225px" style="flaot:left;"/></div>
+    <div style="margin:20px;">
+    <br><br>
+      <b>Hello {{ full_name }}!</b>
+      <br /><br>
+      <div style="color:#12c;font-weight:bold;">Recommended Upcoming events</div><hr/>
+      <br>
+	  <table width="80%">
+	    <tbody>{{ recommend_tr_list }}</tbody>
+	  </table>
 
-	<table>{{ recommend_tr_list }}
+	  <br> <div style="color:#12c;font-weight:bold;">You also might be interested in:</div><hr/><br >
 
-	</table>
-
-	<br> You also might be interested in:
-
-	<table>{{ related_tr_list }}
-	</table>
-
+	  <table width="80%">
+	    <tbody>{{ related_tr_list }}</tbody>
+	  </table>
+	  <br>
 	Happy Meeting, EventsIN Team,
 
 </body>
