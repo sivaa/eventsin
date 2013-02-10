@@ -12,6 +12,16 @@
       cursor:pointer;
       background: #FFF url('https://developer.linkedin.com/sites/default/files/js-signin.png') !important;
     }
+    body.login {
+      background : #fff !important;
+    }
+    .login #container {
+      border : none !important;
+      margin-top : 160px;
+    }
+    #header {
+      display: none;
+    }
   </style>
 {% endblock %}
 
@@ -41,6 +51,7 @@
 <div id="content-main">
 <form action="/login/linkedin" method="get" id="login-form">{% csrf_token %}
   <div align="center">
+    <img src="https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg" width="225px"/><br /><br />
     <input type="submit" class="buttonStyle" value=""/>
   </div>
 </form>
