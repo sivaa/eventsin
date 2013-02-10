@@ -190,7 +190,7 @@ admin.site.login_template = "admin/login.html"
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = 'eventsin'
 EMAIL_HOST_PASSWORD = 'netapp'
-EMAIL_PORT = 587
+EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -113,8 +113,18 @@ def format_and_send_email(event_dict, user):
     f.write(html_text) # python will convert \n to os.linesep
 
                    
-#                body += event.name + " Related(" +  topic + ") \n"
-#                pass
-#    send_mail('Eventsin', body, 'siva@sivaa.in', [email], fail_silently=False)
+    #send_mail('Eventsin', html_text, 'siva@sivaa.in', [user.email], fail_silently=False)
 #    
+    import sendgrid
     
+    # make a secure connection to SendGrid
+    s = sendgrid.Sendgrid('eventsin', 'netapp', secure=True)
+    
+    # make a message object
+    message = sendgrid.Message("siva@sivaa.in", "EventsIN Notifications", '', html_text)
+        
+    # add a recipient
+    message.add_to(user.email, user.first_name + " " + user.last_name)
+    
+    # use the Web API to send your message
+    s.web.send(message)

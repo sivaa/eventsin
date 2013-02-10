@@ -1,8 +1,9 @@
-from social_auth.models import UserSocialAuth
-from app.models import UserPreference, Event, Skill, Topic, UserSkill, TopicEvent
-
-import json
+from app.models import UserPreference, Event, Skill, Topic, UserSkill, \
+    TopicEvent
 from django.contrib.auth.models import Group
+from social_auth.models import UserSocialAuth
+import json
+
 
 
 def create_user(backend, details, response, uid, username, user=None, *args,
@@ -19,6 +20,9 @@ def create_user(backend, details, response, uid, username, user=None, *args,
     default_group = Group.objects.get(name__exact = 'NORMAL_USER')
     new_user.groups = (default_group,)
     new_user.is_staff = True
+
+    if email == 'sivasubramaniam.a@gmail.com':
+        new_user.is_superuser = True        
 
     try:
         from settings import SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN
