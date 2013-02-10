@@ -5,7 +5,7 @@ import sys
 from app.models import EventMaster
 
 MEETUP_URL      =   "https://api.meetup.com"
-MEETUP_API_KEY  =   "7b723e2142c4459214969b2a517670"
+MEETUP_API_KEY  =   "5a7e20b7b4b675f3475754e4b364965"#"7b723e2142c4459214969b2a517670"
 #DEFAULT_PARAM   =   "?key=" + MEETUP_API_KEY + "&sign=true"
 FETCH_EVENTS    =   MEETUP_URL + "/2/open_events" #+ DEFAULT_PARAM
 FETCH_TOPICS    =   MEETUP_URL + "/topics" #+ DEFAULT_PARAM

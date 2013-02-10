@@ -12,7 +12,11 @@ class Command(BaseCommand):
         #print skill_list
         for skill in skill_list:
             print "Looking for " + skill.name
-            topic_list = parse_topics_for_skill(skill.name)
+            topic_list = []
+            try:
+                topic_list = parse_topics_for_skill(skill.name)
+            except:
+                print "ERROR 400"
             #print topic_list
             for topic in topic_list:
                 try:

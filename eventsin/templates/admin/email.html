@@ -2,24 +2,25 @@
 
 <html>
 <body>
-    <div style="text-align:center"><img src="https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg" width="225px" style="flaot:left;"/></div>
     <div style="margin:20px;">
     <br><br>
-      <b>Hello {{ full_name }}!</b>
+      <b>Hello {{ full_name }}!</b>     <div style="text-align:center"><img src="https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg" width="225px" style="flaot:left;"/></div>
+      	
       <br /><br>
-      <div style="color:#12c;font-weight:bold;">Recommended Upcoming events</div><hr/>
+      <div style="color:#12c;font-weight:bold;"><h1>Recommended Upcoming events</h1></div><hr/>
       <br>
-	  <table width="80%">
+	  <table>
 	    <tbody>{{ recommend_tr_list }}</tbody>
 	  </table>
 
-	  <br> <div style="color:#12c;font-weight:bold;">You also might be interested in:</div><hr/><br >
+	  <br> <div style="color:#12c;font-weight:bold;"><h1>You also might be interested in </h1></div><hr/><br >
 
-	  <table width="80%">
+	  <table>
 	    <tbody>{{ related_tr_list }}</tbody>
 	  </table>
 	  <br>
-	Happy Meeting, EventsIN Team,
+	Happy Meeting,<br>
+	EventsIN Team
 
 </body>
 </html>

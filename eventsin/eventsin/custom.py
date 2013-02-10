@@ -73,7 +73,7 @@ def update_user_skill(social_user):
                                   user    =   social_user.user,
                                   weekly  =   True,
                                   email   =   True,
-                                  city    =   data['location']['name'].split(',')[0].replace('Area', ''),
+                                  city    =   data['location']['name'].split(',')[0].replace('Area', '').replace('Bay', ''),
                                   country =   data['location']['country']['code'],
                                   mobile  =   mobile,
                                   )

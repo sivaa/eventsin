@@ -55,13 +55,13 @@ class Command(BaseCommand):
 
 
 def format_and_send_email(event_dict, user):
-    print event_dict
+    #print event_dict
     
     recommend_tr_list = ''
     related_tr_list = ''
     
     for event in event_dict:
-        print event_dict[event]
+        #print event_dict[event]
         is_related = True
         for topic in event_dict[event]:
             try:
@@ -108,9 +108,9 @@ def format_and_send_email(event_dict, user):
             )
 
 
-    print html_text
-    f = open('myfile.html','w')
-    f.write(html_text) # python will convert \n to os.linesep
+#    print html_text
+#    f = open('myfile.html','w')
+#    f.write(html_text) # python will convert \n to os.linesep
 
                    
     #send_mail('Eventsin', html_text, 'siva@sivaa.in', [user.email], fail_silently=False)
@@ -121,10 +121,15 @@ def format_and_send_email(event_dict, user):
     s = sendgrid.Sendgrid('eventsin', 'netapp', secure=True)
     
     # make a message object
-    message = sendgrid.Message("siva@sivaa.in", "EventsIN Notifications", '', html_text)
+    message = sendgrid.Message("notifications@eventsin.com", "EventsIN Notifications", '', html_text)
         
     # add a recipient
     message.add_to(user.email, user.first_name + " " + user.last_name)
+
+    if recommend_tr_list == '' and related_tr_list == '':
+        print "No Notifications found for " + user.first_name + " " + user.last_name
+    else:
+        print "Sending to " + user.first_name + " " + user.last_name
     
     # use the Web API to send your message
     s.web.send(message)
