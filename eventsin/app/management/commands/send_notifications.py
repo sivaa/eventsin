@@ -133,9 +133,8 @@ def format_and_send_email(event_dict, user, mobile):
         print "No Notifications found for " + user.first_name + " " + user.last_name
     else:
         print "Sending to " + user.first_name + " " + user.last_name
-    
-    # use the Web API to send your message
-    #s.web.send(message)
+        # use the Web API to send your message
+        s.web.send(message)
 
     #print str(event_dict)
     try:
