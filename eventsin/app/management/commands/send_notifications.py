@@ -1,7 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
 from app.models import Topic, Skill, UserPreference, UserSkill, Event,\
-    TopicEvent
+    TopicEvent, alternate_location_names
 from app.parser import parse_events_for_topic, parse_topics_for_skill
+from django.core.mail import send_mail
 
 class Command(BaseCommand):
     args = '<poll_id poll_id ...>'
@@ -12,8 +13,12 @@ class Command(BaseCommand):
         user_preference_list = UserPreference.objects.all()
         
         for user_preference in user_preference_list:
-            body = ''
-            print "USER : " + user_preference.user.username 
+            city = user_preference.city
+            if str(user_preference.city).strip() in alternate_location_names:
+                city = alternate_location_names[str(user_preference.city).strip()]
+
+            event_dict = {}
+            #print "USER : " + user_preference.user.username 
             user_skill_list = UserSkill.objects.filter(user = user_preference.user)
             
             for user_skill in user_skill_list:
@@ -21,15 +26,55 @@ class Command(BaseCommand):
 
                 for topic in topic_list:
                     topic_event_list = TopicEvent.objects.filter(topic = topic, 
-                                                                  event__city__exact = 'Bangalore', 
+                                                                  event__city__exact = city, 
                                                                   event__country_code__exact = user_preference.country)
 
                     for topic_event in topic_event_list:
-                        print topic.name + " =====>>>>> " +     topic_event.event.name
-                        body += topic.name + " =====>>>>> " +     topic_event.event.name + '\n' 
-                        print '----------------------------------------------------'
-            
-            from django.core.mail import send_mail
-            send_mail('Eventsin', body, 'siva@sivaa.in', [user_preference.user.email], fail_silently=False)
+                        if topic_event.event in event_dict:
+#                            print "=== type ==="
+#                            print type(event_dict[topic_event.event])
+                            list = event_dict[topic_event.event]
+                            list.append(topic.name)
+                            
+                            event_dict[topic_event.event] = list# event_dict[topic_event.event].append(topic.name)
+#                            print event_dict[topic_event.event]
+#                            print "=== updated  ====" 
+
+                        else:
+                            event_dict[topic_event.event] = [topic.name]
+#                            print event_dict[topic_event.event]
+#                            print "=== added ====" 
+                        #print topic.name + " =====>>>>> " +     topic_event.event.name
+
+            # Send Mail
+            format_and_send_email(event_dict, user_preference.user.email)
             
         print "=============== COMPLETED ======================"
+
+
+def format_and_send_email(event_dict, email):
+    body = ''
+    print event_dict
+    for event in event_dict:
+        print event_dict[event]
+        is_related = True
+        for topic in event_dict[event]:
+            try:
+                if event.name.lower().index(topic.lower()) == 0:
+                    is_related = False
+            except:
+                try:
+                    if event.description.lower().index(topic.lower()) == 0:
+                        is_related = False
+                except:
+                    pass
+        if is_related:
+            print "======= realted"
+        else:
+            print "direct ====="
+                    
+#                body += event.name + " Related(" +  topic + ") \n"
+#                pass
+#    send_mail('Eventsin', body, 'siva@sivaa.in', [email], fail_silently=False)
+#    
+    

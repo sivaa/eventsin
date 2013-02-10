@@ -3,7 +3,35 @@ from app.models import Event, Skill, Topic, TopicEvent, UserPreference, UserSkil
 
 class UserPreferenceAdmin(admin.ModelAdmin):
     list_display = ('name', 'daily', 'weekly', 'email', 'sms', 'city', 'country', 'mobile', 'user_email')
+    list_editable = ('daily', 'weekly', 'email', 'sms',)
+    
+    def queryset(self, request):
+        qs = self.model._default_manager.get_query_set()
+        ordering = self.get_ordering(request)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        if not request.user.is_superuser:
+            return qs.filter(user__email__exact = request.user.email)
+        self.list_editable = ()
+        return qs
+    
+    
+    def has_change_permission(self, request, obj=None):
+        return True
+        """
+        Returns True if the given request has permission to change the given
+        Django model instance, the default implementation doesn't examine the
+        `obj` parameter.
 
+        Can be overriden by the user in subclasses. In such case it should
+        return True if the given request has permission to change the `obj`
+        model instance. If `obj` is None, this should return True if the given
+        request has permission to change *any* object of the given type.
+        """
+        opts = self.opts
+        return request.user.has_perm(opts.app_label + '.' + opts.get_change_permission())
+
+    
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('name',)
 

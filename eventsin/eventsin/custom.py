@@ -2,7 +2,7 @@ from social_auth.models import UserSocialAuth
 from app.models import UserPreference, Event, Skill, Topic, UserSkill, TopicEvent
 
 import json
-
+from django.contrib.auth.models import Group
 
 
 def create_user(backend, details, response, uid, username, user=None, *args,
@@ -16,6 +16,8 @@ def create_user(backend, details, response, uid, username, user=None, *args,
     # Customization 
     email = details.get('email')
     new_user = UserSocialAuth.create_user(username=email, email=email)
+    default_group = Group.objects.get(name__exact = 'NORMAL_USER')
+    new_user.groups = (default_group,)
     new_user.is_staff = True
 
     try:
@@ -72,14 +74,16 @@ def update_user_skill(social_user):
                                   mobile  =   mobile,
                                   )
     
-    for skill in data['skills']['skill']:
-        skill_obj = None
-        try:
-            skill_obj = Skill.objects.get(name = skill['skill']['name'])
-            print "already exists"
-        except:
-            skill_obj = Skill.objects.create( name = skill['skill']['name'])
-        try:
-            UserSkill.objects.create(user = social_user.user, skill = skill_obj)
-        except:
-            pass
+    try:
+        for skill in data['skills']['skill']:
+            skill_obj = None
+            try:
+                skill_obj = Skill.objects.get(name = skill['skill']['name']) # Already Exists             
+            except:
+                skill_obj = Skill.objects.create( name = skill['skill']['name'])
+            try:
+                UserSkill.objects.create(user = social_user.user, skill = skill_obj)
+            except:
+                pass # Already Exists
+    except:
+        pass # No Skill exists

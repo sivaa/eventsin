@@ -4,7 +4,6 @@ import os
 
 CURRENT_PATH = os.path.abspath(os.path.dirname(__file__).decode('utf-8')).replace('/settings','/').replace('\\settings','\\') # For windows
 
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -133,7 +132,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 #LOGIN_URL          = '/login-form/'
-LOGIN_REDIRECT_URL = '/admin/social_auth/usersocialauth/1/'
+LOGIN_REDIRECT_URL = '/admin/app/userpreference/'
 LOGIN_ERROR_URL    = '/login-error/'
 
 SOCIAL_AUTH_COMPLETE_URL_NAME  = 'socialauth_complete'
@@ -182,7 +181,7 @@ SOCIAL_AUTH_PIPELINE = (
                 'social_auth.backends.pipeline.user.update_user_details',
            )
 
-SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = True
+SOCIAL_AUTH_CREATE_USERS_AS_SUPER_ADMIN = False
 
 # Override the default login page template
 from eventsin.urls import admin
@@ -195,10 +194,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-
-#from django.core.mail import send_mail
-#send_mail('Subject here', 'Here is the message.', 'from@example.com', ['to@example.com'], fail_silently=False)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

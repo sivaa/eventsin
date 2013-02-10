@@ -95,4 +95,6 @@ class EventMaster:
         self.date = date
         self.description = description
         self.cost = cost
-        
+
+alternate_location_names = {'Bengaluru': 'Bangalore',                           
+                           }
