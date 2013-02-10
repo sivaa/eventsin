@@ -28,10 +28,55 @@
 <script type="text/javascript">
 (function($) {
     $(document).ready(function($) {
+//    	var style = css($("#h1:odd"));
+//    	alert(style);
+    	$('#branding').css('background', 'white');
+    	$('#user-tools').css('color', 'grey');
+    	$('#user-tools a').css('color', 'blue');
+    	
+    	//#F4F379
+    	
     	$('h1:odd').html('Notification Preference');
-    	$('h1:even').html("<img width='142px'  src='https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg'>");
+    	$('h1:even').html("<img width='142px' style='padding: 10px'  src='https://lh6.googleusercontent.com/-jxwqWutkczI/URdJLZGZ8pI/AAAAAAAAAio/amcjXHoVF7w/w1238-h334-p-k/final-logo2.jpg'>");
     	$('.paginator').html($('.paginator').html().replace('1 user preference', '' ));
+    	
+    	//$('#site-name').css('backgroud','red');
+    	
     });
+    
+    
+    function css(a){
+        var sheets = document.styleSheets, o = {};
+        for(var i in sheets) {
+            var rules = sheets[i].rules || sheets[i].cssRules;
+            for(var r in rules) {
+                if(a.is(rules[r].selectorText)) {
+                    o = $.extend(o, css2json(rules[r].style), css2json(a.attr('style')));
+                }
+            }
+        }
+        return o;
+    }
+
+    function css2json(css){
+            var s = {};
+            if(!css) return s;
+            if(css instanceof CSSStyleDeclaration) {
+                for(var i in css) {
+                    if((css[i]).toLowerCase) {
+                        s[(css[i]).toLowerCase()] = (css[css[i]]);
+                    }
+                }
+            } else if(typeof css == "string") {
+                css = css.split("; ");          
+                for (var i in css) {
+                    var l = css[i].split(": ");
+                    s[l[0].toLowerCase()] = (l[1]);
+                };
+            }
+            return s;
+        }
+    
 })(django.jQuery);
 </script>
 
