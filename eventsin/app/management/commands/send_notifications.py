@@ -49,16 +49,18 @@ class Command(BaseCommand):
                         #print topic.name + " =====>>>>> " +     topic_event.event.name
 
             # Send Mail
-            format_and_send_email(event_dict, user_preference.user)
+            format_and_send_email(event_dict, user_preference.user, user_preference.mobile)
             
         print "=============== COMPLETED ======================"
 
 
-def format_and_send_email(event_dict, user):
+def format_and_send_email(event_dict, user, mobile):
     #print event_dict
     
     recommend_tr_list = ''
     related_tr_list = ''
+    
+    recommend_list = []
     
     for event in event_dict:
         #print event_dict[event]
@@ -85,6 +87,7 @@ def format_and_send_email(event_dict, user):
             })
             )
         else:
+            recommend_list.append(event)
             recommend_tr_list += get_template('admin/tr.html').render(
             Context({
                 'url': event.url,
@@ -132,4 +135,31 @@ def format_and_send_email(event_dict, user):
         print "Sending to " + user.first_name + " " + user.last_name
     
     # use the Web API to send your message
-    s.web.send(message)
+    #s.web.send(message)
+
+    #print str(event_dict)
+    try:
+        if not mobile.index('+'):
+            pass
+    except:
+        mobile = None
+    
+    if recommend_tr_list == '' and related_tr_list == '':
+        mobile = None
+
+    from twilio.rest import TwilioRestClient
+    # Find these values at https://twilio.com/user/account
+    account_sid = "ACac3a53d62660c39d1cf4126a56f67a0b"
+    auth_token = "81024aa8cbebd2bb0e75614b42c106d7"
+    client = TwilioRestClient(account_sid, auth_token)
+    
+    
+    if mobile and len(recommend_list)> 0 :
+        try:
+            message_str = ''
+            for recommend_event in recommend_list:
+                message_str += " "+ recommend_event.name + " on " + str(recommend_event.date)
+            #print message_str
+            message = client.sms.messages.create(to=mobile, from_="+18607994838", body=message_str[0:150])
+        except:
+            pass

@@ -24,10 +24,10 @@ class UserPreferenceAdmin(admin.ModelAdmin):
         
         if not request.user.is_superuser:
             return qs.filter(user__email__exact = request.user.email)
-        #self.list_editable = ()
-        #self.list_display_links = ( )
-
-        #self.fieldsets = []
+#        self.list_editable = ()
+#        self.list_display_links = ( )
+#
+#        self.fieldsets = []
 
         return qs
     
