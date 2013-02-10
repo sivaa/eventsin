@@ -2,7 +2,18 @@
 {% load i18n admin_static %}
 {% load url from future %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />{% endblock %}
+{% block extrastyle %}{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />
+  <style type="text/css">
+    .buttonStyle {
+      height: 32px !important;
+      width: 142px !important;
+      border: none !important;
+      cursor:pointer;
+      background: #FFF url('https://developer.linkedin.com/sites/default/files/js-signin.png') !important;
+    }
+  </style>
+{% endblock %}
 
 {% block bodyclass %}login{% endblock %}
 
@@ -29,11 +40,9 @@
 
 <div id="content-main">
 <form action="/login/linkedin" method="get" id="login-form">{% csrf_token %}
-    
   <div align="center">
-    <input type="submit" value="{% trans 'Log in using Linkedin' %}" />
+    <input type="submit" class="buttonStyle" value=""/>
   </div>
 </form>
-
 </div>
 {% endblock %}
