@@ -150,8 +150,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 SOCIAL_AUTH_EXPIRATION = 'expires'
 SOCIAL_AUTH_SESSION_EXPIRATION = False
 
-LINKEDIN_CONSUMER_KEY        = 'p2yl5397cjzd'
-LINKEDIN_CONSUMER_SECRET     = 'SXpX82yxqqxkmaZu'
+LINKEDIN_CONSUMER_KEY        = ''
+LINKEDIN_CONSUMER_SECRET     = ''
 
 LINKEDIN_SCOPE = ['r_basicprofile', 'r_fullprofile', 'r_emailaddress', 'r_contactinfo',]
 
@@ -188,8 +188,8 @@ from eventsin.urls import admin
 admin.site.login_template = "admin/login.html"
 
 EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'eventsin'
-EMAIL_HOST_PASSWORD = 'netapp'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 
